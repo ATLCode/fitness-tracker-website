@@ -8,7 +8,7 @@
 
 <script setup></script>
 
-<style>
+<style scoped lang="scss">
 .frontpage {
   background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)),
     url("~@/assets/landscape.jpg");

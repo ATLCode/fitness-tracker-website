@@ -45,7 +45,7 @@ function selectTab(tab) {
     font-weight: bold;
   }
   .active {
-    background: rgba(5, 5, 15, 0.5);
+    background: hsla(0, 0%, 10%, 0.8);
     color: white;
   }
 }

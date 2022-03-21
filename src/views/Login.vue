@@ -3,8 +3,13 @@
     <div class="form">
       <Tabs class="tabs" v-model="selectedTab" :tabs="tabs" />
       <div v-if="selectedTab === 'Login'" class="login">
-        <CustomInput type="text" placeholder="email" />
-        <CustomInput type="password" placeholder="password" />
+        <CustomInput v-model="user.email" type="text" placeholder="email" />
+        <CustomInput
+          v-model="user.password"
+          type="password"
+          placeholder="password"
+        />
+        <CustomButton @click="login">Login</CustomButton>
       </div>
       <div v-else class="register">
         <CustomInput v-model="user.email" type="text" placeholder="email" />
@@ -35,33 +40,60 @@
         />
         <CustomInput v-model="user.height" type="text" placeholder="height" />
         <CustomInput v-model="user.weight" type="text" placeholder="weight" />
+        <CustomButton @click="register">Register</CustomButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import Tabs from "@/components/Tabs.vue";
 import CustomInput from "@/components/CustomInput.vue";
-import { reactive, ref } from "vue";
+import CustomButton from "@/components/CustomButton.vue";
+import useUserState from "@/store/useUserState";
+const userState = useUserState();
+const router = useRouter();
 const tabs = ref(["Login", "Register"]);
 const selectedTab = ref("Login");
 const user = reactive({
-  email: "",
-  password: "",
-  confirmPassword: "",
-  firstName: "",
-  lastName: "",
-  dateOfBirth: "",
-  height: "",
-  weight: "",
+  email: null,
+  password: null,
+  confirmPassword: null,
+  firstName: null,
+  lastName: null,
+  dateOfBirth: null,
+  height: null,
+  weight: null,
 });
+
+async function login() {
+  try {
+    await userState.login({
+      email: user.email,
+      password: user.password,
+    });
+    router.push("/calendar");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function register() {
+  try {
+    delete user.dateOfBirth;
+    await userState.register(user);
+    console.log("register success");
+  } catch (error) {
+    console.error(error);
+  }
+}
 </script>
 
-<style>
+<style scoped lang="scss">
 .page {
-  background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)),
-    url("~@/assets/weight.jpg");
+  background-image: $bg-darken, url("~@/assets/weight.jpg");
   background-size: cover;
   display: flex;
   justify-content: center;
@@ -81,6 +113,7 @@ const user = reactive({
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 5px;
 }
 
 .tabs {
