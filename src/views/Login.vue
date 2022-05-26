@@ -93,7 +93,7 @@ async function register() {
 
 <style scoped lang="scss">
 .page {
-  background-image: $bg-darken, url("~@/assets/weight.jpg");
+  background-image: $bg-darken, url("~@/assets/login.jpg");
   background-size: cover;
   display: flex;
   justify-content: center;
@@ -104,7 +104,7 @@ async function register() {
   max-width: 95vw;
   display: flex;
   flex-direction: column;
-  margin-top: 40vh;
+  margin-top: 25vh;
 }
 
 .login,

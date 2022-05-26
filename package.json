@@ -10,9 +10,11 @@
   "dependencies": {
     "axios": "^0.26.0",
     "core-js": "^3.6.5",
+    "moment": "^2.29.3",
     "v-calendar": "^3.0.0-alpha.8",
     "vue": "^3.0.0",
     "vue-material": "^1.0.0-beta-15",
+    "vue-material-design-icons": "^5.0.0",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {

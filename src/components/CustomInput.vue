@@ -1,5 +1,17 @@
 <template>
-  <textarea v-if="type === 'textarea'" rows="3" />
+  <textarea
+    v-if="type === 'textarea'"
+    rows="3"
+    :value="modelValue"
+    @input="updateValue"
+  />
+  <select
+    v-else-if="type === 'select'"
+    :value="modelValue"
+    @input="updateValue"
+  >
+    <option v-for="option of options" :key="option">{{ option }}</option>
+  </select>
   <input
     v-else
     :type="type"
@@ -15,6 +27,7 @@ defineProps({
   modelValue: String,
   type: String,
   placeholder: String,
+  options: Array,
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -26,7 +39,8 @@ function updateValue(event) {
 
 <style scoped lang="scss">
 input,
-textarea {
+textarea,
+select {
   background-color: $bg-input;
   color: $text-secondary;
   outline: none;

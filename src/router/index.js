@@ -4,6 +4,7 @@ import Login from "../views/Login.vue";
 import Library from "../views/Library.vue";
 import Calendar from "../views/Calendar.vue";
 import Settings from "../views/Settings.vue";
+import ExecuteWorkout from "../views/ExecuteWorkout.vue";
 import useUserState from "@/store/useUserState";
 const userState = useUserState();
 
@@ -40,6 +41,11 @@ const routes = [
     path: "/settings",
     name: "Settings",
     component: Settings,
+  },
+  {
+    path: "/execute-workout",
+    name: "ExecuteWorkout",
+    component: ExecuteWorkout,
   },
 ];
 

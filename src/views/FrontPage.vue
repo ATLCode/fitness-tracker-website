@@ -19,9 +19,11 @@
 
 h1 {
   color: white;
+  line-height: 3rem;
 }
 
 .content {
+  margin: 1rem;
   margin-top: 25vh;
 }
 </style>

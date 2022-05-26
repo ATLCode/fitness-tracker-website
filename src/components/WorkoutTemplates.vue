@@ -1,16 +1,22 @@
 <template>
   <div class="wcontent">
-    <WorkoutFilter />
-    <WorkoutCard />
+    <WorkoutCard :workouts="state.templates || []" />
     <CustomButton>NEW WORKOUT +</CustomButton>
   </div>
 </template>
 
 <script setup>
 //Tabs (Workouts, Execises)
+import { onMounted } from "vue";
 import CustomButton from "@/components/CustomButton.vue";
-import WorkoutFilter from "@/components/WorkoutFilter.vue";
 import WorkoutCard from "@/components/WorkoutCard.vue";
+import useWorkoutState from "@/store/useWorkoutState";
+
+const { getTemplates, state } = useWorkoutState();
+onMounted(async () => {
+  await getTemplates();
+  console.log(state);
+});
 </script>
 
 <style scoped lang="scss">
@@ -18,7 +24,7 @@ import WorkoutCard from "@/components/WorkoutCard.vue";
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border: 5px solid $border;
+  border: 3px solid $border;
   background-color: $bg-content;
 }
 </style>

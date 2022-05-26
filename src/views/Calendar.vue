@@ -12,19 +12,37 @@
     </div>
 
     <div class="info">
-      <div class="date">17/03/2022</div>
+      <div class="date">{{ formattedDate }}</div>
       <div class="controls">
-        <CustomButton height="50px">Add Workout</CustomButton>
+        <CustomButton height="50px" @click="showSelectWorkout = true"
+          >Add Workout</CustomButton
+        >
       </div>
     </div>
+    <WorkoutListModal
+      :workoutTemplate="true"
+      v-if="showSelectWorkout"
+      @close="showSelectWorkout = false"
+      @create-workout-template="showCreateWorkoutTemplateModal = true"
+    />
+    <CreateWorkoutTemplateModal
+      v-if="showCreateWorkoutTemplateModal"
+      @close="showCreateWorkoutTemplateModal = false"
+    />
   </div>
 </template>
 
 <script setup>
 //Calendar Widget
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Calendar } from "v-calendar";
 import CustomButton from "@/components/CustomButton.vue";
+import WorkoutListModal from "@/components/WorkoutListModal.vue";
+import CreateWorkoutTemplateModal from "@/components/CreateWorkoutTemplateModal.vue";
+import moment from "moment";
+const showSelectWorkout = ref(false);
+const showCreateWorkoutTemplateModal = ref(false);
+const selectedDate = ref(new Date());
 const data = [
   {
     dates: new Date("2022-03-07"),
@@ -89,7 +107,12 @@ function selectDate(data) {
     },
     dates: new Date(data.id),
   };
+  selectedDate.value = new Date(data.id);
 }
+
+const formattedDate = computed(() => {
+  return moment(selectedDate.value).format("DD/MM/YYYY");
+});
 </script>
 
 <style scoped lang="scss">
@@ -111,7 +134,7 @@ function selectDate(data) {
 // }
 .info {
   background-color: $bg-content;
-  border: 5px solid $border;
+  border: 3px solid $border;
   color: white;
   border-radius: 12px;
   grid-area: info;

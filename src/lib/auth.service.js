@@ -2,7 +2,6 @@ import axios from "./axios";
 
 class AuthService {
   async login(user) {
-    console.log(user);
     const { data } = await axios.post("/auth/login", user);
 
     if (data.accessToken) {

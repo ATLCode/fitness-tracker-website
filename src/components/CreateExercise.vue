@@ -1,78 +1,102 @@
 <template>
-  <div class="modal">
+  <Modal>
     <div class="content">
       <div class="name">
         <label for="ename">Exercise Name</label>
-        <CustomInput id="ename" type="text" />
+        <CustomInput id="ename" type="text" v-model="body.name" />
       </div>
       <div class="type">
         <label for="etype">Exercise Type</label>
-        <CustomInput type="text" id="etype" />
+        <CustomInput
+          id="wtype"
+          type="select"
+          :options="['Gym', 'Cardio', 'Accuracy', 'Distance']"
+          v-model="body.exerciseType"
+        />
       </div>
       <div class="sport">
         <label for="esport">Exercise Sport</label>
-        <CustomInput type="text" id="esport" />
+        <CustomInput type="text" id="esport" v-model="body.muscleGroup" />
       </div>
       <div class="mg">
         <label for="emg">Muscle Group</label>
-        <CustomInput type="text" id="emg" />
+        <CustomInput type="text" id="emg" v-model="body.sport" />
       </div>
       <div class="desc">
         <label for="desc">Description</label>
-        <CustomInput type="textarea" id="desc" />
+        <CustomInput type="textarea" id="desc" v-model="body.description" />
       </div>
       <div class="save">
-        <CustomButton>Save</CustomButton>
-      </div>
-      <div class="cancel">
-        <CustomButton @click="$emit('close')">Cancel</CustomButton>
+        <CustomButton @click="createExercise">Save</CustomButton>
+        <CustomButton @click="emit('close')">Cancel</CustomButton>
       </div>
     </div>
-  </div>
+  </Modal>
 </template>
 
 <script setup>
 import CustomInput from "@/components/CustomInput.vue";
 import CustomButton from "@/components/CustomButton.vue";
+import Modal from "@/components/Modal.vue";
+import { reactive, defineEmits } from "vue";
+import useExerciseState from "@/store/useExerciseState";
+const { createTemplate } = useExerciseState();
+
+const emit = defineEmits(["close"]);
+
+const body = reactive({
+  name: null,
+  exerciseType: null,
+  muscleGroup: null,
+  description: null,
+});
+
+function createExercise() {
+  createTemplate(body);
+  emit("close");
+}
 </script>
 
 <style scoped lang="scss">
-.modal {
-  display: block; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
-}
-
 .content {
   display: grid;
   grid-template-areas:
-    "name type sport mg"
-    "desc desc desc desc"
-    "save save cancel cancel";
-  row-gap: 15px;
-  background-color: $background;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 3px solid $border2;
-  width: 80%; /* Could be more or less, depending on screen size */
+    "name type "
+    "sport desc "
+    "mg  desc"
+    "save save";
+  gap: 15px;
+}
+
+.name {
+  grid-area: name;
+}
+
+.type {
+  grid-area: type;
+}
+
+.sport {
+  grid-area: sport;
+}
+
+.mg {
+  grid-area: mg;
 }
 
 .desc {
   grid-area: desc;
+  textarea {
+    height: 100%;
+  }
 }
 
 .save {
   grid-area: save;
-}
-.cancel {
-  grid-area: cancel;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: auto auto;
+  gap: 10em;
 }
 
 label {
@@ -80,14 +104,14 @@ label {
   font-size: 2rem;
   align-self: flex-start;
 }
+
 .name,
 .type,
 .sport,
 .mg,
 .desc {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
   flex-direction: column;
   gap: 15px;
 }

@@ -2,10 +2,17 @@
   <div class="library-page">
     <Tabs class="tabs" v-model="selectedTab" :tabs="tabs" />
     <div v-if="selectedTab === 'Workouts'" class="workouts">
-      <WorkoutTemplates @show-modal="showCreateWorkout = true" />
+      <WorkoutCard :workouts="workoutState.templates || []" caller="Library" />
+      <CustomButton>NEW WORKOUT +</CustomButton>
     </div>
     <div v-else class="exercises">
-      <ExerciseTemplates @show-modal="showCreateExercise = true" />
+      <ExerciseCard
+        :exercises="exerciseState.templates || []"
+        caller="Library"
+      />
+      <CustomButton @click="showCreateExercise = true"
+        >NEW EXERCISE +</CustomButton
+      >
     </div>
     <transition name="fade">
       <CreateExercise
@@ -19,14 +26,27 @@
 <script setup>
 //Tabs (Workouts, Execises)
 import Tabs from "@/components/Tabs.vue";
-import ExerciseTemplates from "@/components/ExerciseTemplates.vue";
-import WorkoutTemplates from "@/components/WorkoutTemplates.vue";
 import CreateExercise from "@/components/CreateExercise.vue";
-import { ref } from "vue";
+import CustomButton from "@/components/CustomButton.vue";
+import WorkoutCard from "@/components/WorkoutCard.vue";
+import ExerciseCard from "@/components/ExerciseCard.vue";
+import useWorkoutState from "@/store/useWorkoutState";
+import useExerciseState from "@/store/useExerciseState";
+
+import { ref, onMounted } from "vue";
 const tabs = ref(["Workouts", "Exercises"]);
 const selectedTab = ref("Workouts");
 const showCreateExercise = ref(false);
-const showCreateWorkout = ref(false);
+// const showCreateWorkout = ref(false);
+
+const { getTemplates: getWorkoutTemplates, state: workoutState } =
+  useWorkoutState();
+const { getTemplates: getExerciseTemplates, state: exerciseState } =
+  useExerciseState();
+onMounted(async () => {
+  await getWorkoutTemplates();
+  await getExerciseTemplates();
+});
 </script>
 
 <style scoped lang="scss">
@@ -57,5 +77,14 @@ const showCreateWorkout = ref(false);
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.workouts,
+.exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 3px solid $border;
+  background-color: $bg-content;
 }
 </style>

@@ -8,7 +8,11 @@ import NavBar from "@/components/NavBar";
 </script>
 
 <style lang="scss">
+html {
+  font-size: 16px;
+}
 #app {
+  //font-size: 16px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -18,5 +22,10 @@ import NavBar from "@/components/NavBar";
 #view {
   padding-top: 50px;
   min-height: calc(100vh);
+}
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 12px;
+  }
 }
 </style>

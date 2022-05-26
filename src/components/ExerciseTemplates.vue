@@ -1,28 +1,19 @@
 <template>
   <div class="econtent">
-    <ExerciseFilter />
-    <ExerciseCard
-      v-for="template of templates"
-      :template="template"
-      :key="template.id"
-    />
+    <ExerciseCard :exercises="state.templates || []" />
     <CustomButton @click="$emit('show-modal')">NEW EXERCISE +</CustomButton>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { onMounted } from "vue";
 import ExerciseCard from "@/components/ExerciseCard.vue";
-import ExerciseFilter from "@/components/ExerciseFilter.vue";
 import CustomButton from "@/components/CustomButton.vue";
-
-const res = await fetch("http://localhost:8000/exercises/templates", {
-  headers: {
-    Authorize: `Bearer ${localStorage.getItem("accessToken")}`,
-  },
+import useExerciseState from "@/store/useExerciseState";
+const { getTemplates, state } = useExerciseState();
+onMounted(async () => {
+  await getTemplates();
 });
-console.log(res);
-const templates = reactive(await res.json());
 </script>
 
 <style scoped lang="scss">
@@ -30,7 +21,7 @@ const templates = reactive(await res.json());
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border: 5px solid $border;
+  border: 3px solid $border;
   background-color: $bg-content;
 }
 </style>
